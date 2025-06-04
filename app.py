@@ -1029,5 +1029,8 @@ def resolver_problema():
         print(f"Error inesperado: {str(e)}")
         return jsonify({'error': f'Error interno del servidor: {str(e)}'}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', port=5000)
+import os
+
+if __name__ == '__main__' and os.getenv("VERCEL") != "1":
+    app.run(debug=True)
+

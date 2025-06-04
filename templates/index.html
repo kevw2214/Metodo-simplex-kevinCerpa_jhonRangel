@@ -1,0 +1,1242 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="gradient-bg hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="fas fa-chart-line me-3"></i>
+                    Método Simplex - kevin cerpa y jhon rangel
+                </h1>
+                <p class="lead mb-4">
+                    Resuelve problemas de programación lineal con implementación del algoritmo Simplex y dualidad.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="#solver" class="btn btn-primary btn-lg">
+                        <i class="fas fa-play me-2"></i>
+                        Comenzar
+                    </a>
+                    <a href="#como-usar" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-question-circle me-2"></i>
+                        Cómo usar
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <i class="fas fa-calculator" style="font-size: 8rem; opacity: 0.3;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="display-5 fw-bold mb-3">Características</h2>
+                <p class="lead text-muted">Implementación del método Simplex</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 card-hover border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-table feature-icon"></i>
+                        <h5 class="card-title">Método Simplex</h5>
+                        <p class="card-text">Implementación del algoritmo Simplex con manejo adecuado de tableaux.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 card-hover border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-exchange-alt feature-icon"></i>
+                        <h5 class="card-title">Dualidad Corregida</h5>
+                        <p class="card-text">Aplicación correcta de dualidad que trata el problema dual como un primal normal.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 card-hover border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-cogs feature-icon"></i>
+                        <h5 class="card-title">Estandarización Mejorada</h5>
+                        <p class="card-text">Conversión mejorada a forma estándar con manejo correcto de variables.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Solver Section -->
+<section id="solver" class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="display-6 fw-bold text-center mb-5">
+                    <i class="fas fa-calculator me-3"></i>
+                    Resolver Problema
+                </h2>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-edit me-2"></i>
+                            Configuración del Problema
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="simplexForm">
+                            <!-- Tipo de Optimización -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-arrow-up me-2"></i>
+                                    Tipo de Optimización
+                                </label>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="tipo_optimizacion" id="maximizar" value="max" checked>
+                                            <label class="form-check-label" for="maximizar">
+                                                <i class="fas fa-arrow-up text-success me-1"></i>
+                                                Maximizar
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="tipo_optimizacion" id="minimizar" value="min">
+                                            <label class="form-check-label" for="minimizar">
+                                                <i class="fas fa-arrow-down text-danger me-1"></i>
+                                                Minimizar
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Función Objetivo -->
+                            <div class="mb-4">
+                                <label for="funcion_objetivo" class="form-label fw-bold">
+                                    <i class="fas fa-function me-2"></i>
+                                    Función Objetivo
+                                </label>
+                                <input type="text" class="form-control" id="funcion_objetivo" 
+                                       placeholder="Ejemplo: 2x1 + 3x2 - 4x3" required>
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Formato: ax1 + bx2 + cx3 (use + o - para los signos)
+                                </div>
+                            </div>
+
+                            <!-- Restricciones -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-list me-2"></i>
+                                    Restricciones
+                                </label>
+                                <div id="restricciones-container">
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control restriccion" 
+                                               placeholder="Ejemplo: 2x1 + 3x2 <= 100">
+                                        <button class="btn btn-outline-danger" type="button" onclick="eliminarRestriccion(this)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarRestriccion()">
+                                    <i class="fas fa-plus me-1"></i>
+                                    Agregar Restricción
+                                </button>
+                                <div class="form-text mt-2">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Use <=, >= o = como operadores
+                                </div>
+                            </div>
+
+                            <!-- Dualidad -->
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="aplicar_dualidad">
+                                    <label class="form-check-label" for="aplicar_dualidad">
+                                        <i class="fas fa-exchange-alt me-2"></i>
+                                        Aplicar Dualidad
+                                    </label>
+                                </div>
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Convierte el problema a su forma dual antes de resolver
+                                </div>
+                            </div>
+
+                            <!-- Botones -->
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-play me-2"></i>
+                                    Resolver Problema
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="limpiarFormulario()">
+                                    <i class="fas fa-eraser me-2"></i>
+                                    Limpiar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            Ejemplos de Prueba
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="accordion" id="ejemplosAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ejemplo1">
+                                        <i class="fas fa-example me-2"></i>
+                                        Ejemplo 1: Problema con Dualidad
+                                    </button>
+                                </h2>
+                                <div id="ejemplo1" class="accordion-collapse collapse show" data-bs-parent="#ejemplosAccordion">
+                                    <div class="accordion-body">
+                                        <p><strong>Función Objetivo:</strong></p>
+                                        <code class="math-expression">1000x1 + 500x2</code>
+                                        <p class="mt-2"><strong>Restricciones:</strong></p>
+                                        <code class="math-expression d-block">25x1 + 40x2 <= 100</code>
+                                        <code class="math-expression d-block">10x1 + 18x2 <= 50</code>
+                                        <code class="math-expression d-block">30x1 + 60x2 <= 210</code>
+                                        <button class="btn btn-sm btn-outline-primary mt-2" onclick="cargarEjemplo1()">
+                                            <i class="fas fa-download me-1"></i>
+                                            Cargar Ejemplo
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ejemplo2">
+                                        <i class="fas fa-example me-2"></i>
+                                        Ejemplo 2: Problema Simple
+                                    </button>
+                                </h2>
+                                <div id="ejemplo2" class="accordion-collapse collapse" data-bs-parent="#ejemplosAccordion">
+                                    <div class="accordion-body">
+                                        <p><strong>Función Objetivo:</strong></p>
+                                        <code class="math-expression">3x1 + 2x2</code>
+                                        <p class="mt-2"><strong>Restricciones:</strong></p>
+                                        <code class="math-expression d-block">x1 + x2 <= 4</code>
+                                        <code class="math-expression d-block">2x1 + x2 <= 6</code>
+                                        <button class="btn btn-sm btn-outline-primary mt-2" onclick="cargarEjemplo2()">
+                                            <i class="fas fa-download me-1"></i>
+                                            Cargar Ejemplo
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="loading-spinner text-center">
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Resolviendo...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Resolviendo problema, por favor espere...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Alert -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="alert alert-danger error-alert" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span id="error-message"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="result-section mt-5">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Solución del Problema
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="resultado-contenido">
+                                <!-- El contenido se llenará dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How to Use Section -->
+<section id="como-usar" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="display-6 fw-bold">Cómo Usar</h2>
+                <p class="lead text-muted">Sigue estos pasos para resolver tu problema de programación lineal</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">1</span>
+                    </div>
+                    <h5 class="mt-3">Configurar</h5>
+                    <p class="text-muted">Ingresa la función objetivo y las restricciones de tu problema.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">2</span>
+                    </div>
+                    <h5 class="mt-3">Opciones</h5>
+                    <p class="text-muted">Selecciona si deseas aplicar dualidad al problema.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">3</span>
+                    </div>
+                    <h5 class="mt-3">Resolver</h5>
+                    <p class="text-muted">Haz clic en "Resolver Problema" y espera los resultados.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">4</span>
+                    </div>
+                    <h5 class="mt-3">Analizar</h5>
+                    <p class="text-muted">Revisa la solución paso a paso y los tableaux generados.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let restriccionCount = 1;
+
+function agregarRestriccion() {
+    const container = document.getElementById('restricciones-container');
+    const div = document.createElement('div');
+    div.className = 'input-group mb-2';
+    div.innerHTML = `
+        <input type="text" class="form-control restriccion" 
+               placeholder="Ejemplo: 2x1 + 3x2 <= 100">
+        <button class="btn btn-outline-danger" type="button" onclick="eliminarRestriccion(this)">
+            <i class="fas fa-trash"></i>
+        </button>
+    `;
+    container.appendChild(div);
+    restriccionCount++;
+}
+
+function eliminarRestriccion(button) {
+    if (document.querySelectorAll('.restriccion').length > 1) {
+        button.parentElement.remove();
+        restriccionCount--;
+    } else {
+        alert('Debe haber al menos una restricción');
+    }
+}
+
+function limpiarFormulario() {
+    document.getElementById('simplexForm').reset();
+    document.getElementById('restricciones-container').innerHTML = `
+        <div class="input-group mb-2">
+            <input type="text" class="form-control restriccion" 
+                   placeholder="Ejemplo: 2x1 + 3x2 <= 100">
+            <button class="btn btn-outline-danger" type="button" onclick="eliminarRestriccion(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    `;
+    restriccionCount = 1;
+    ocultarResultados();
+}
+
+function cargarEjemplo1() {
+    document.getElementById('funcion_objetivo').value = '1000x1 + 500x2';
+    document.querySelector('input[name="tipo_optimizacion"][value="max"]').checked = true;
+    document.getElementById('aplicar_dualidad').checked = true;
+    
+    const container = document.getElementById('restricciones-container');
+    container.innerHTML = `
+        <div class="input-group mb-2">
+            <input type="text" class="form-control restriccion" value="25x1 + 40x2 <= 100">
+            <button class="btn btn-outline-danger" type="button" onclick="eliminarRestriccion(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+        <div class="input-group mb-2">
+            <input type="text" class="form-control restriccion" value="10x1 + 18x2 <= 50">
+            <button class="btn btn-outline-danger" type="button" onclick="eliminarRestriccion(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+        <div class="input-group mb-2">
+            <input type="text" class="form-control restriccion" value="30x1 + 60x2 <= 210">
+            <button class="btn btn-outline-danger" type="button" onclick="eliminarRestriccion(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    `;
+}
+
+function cargarEjemplo2() {
+    document.getElementById('funcion_objetivo').value = '3x1 + 2x2';
+    document.querySelector('input[name="tipo_optimizacion"][value="max"]').checked = true;
+    document.getElementById('aplicar_dualidad').checked = false;
+    
+    const container = document.getElementById('restricciones-container');
+    container.innerHTML = `
+        <div class="input-group mb-2">
+            <input type="text" class="form-control restriccion" value="x1 + x2 <= 4">
+            <button class="btn btn-outline-danger" type="button" onclick="eliminarRestriccion(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+        <div class="input-group mb-2">
+            <input type="text" class="form-control restriccion" value="2x1 + x2 <= 6">
+            <button class="btn btn-outline-danger" type="button" onclick="eliminarRestriccion(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    `;
+}
+
+function mostrarLoading() {
+    document.querySelector('.loading-spinner').style.display = 'block';
+    document.querySelector('.result-section').style.display = 'none';
+    document.querySelector('.error-alert').style.display = 'none';
+}
+
+function ocultarLoading() {
+    document.querySelector('.loading-spinner').style.display = 'none';
+}
+
+function mostrarError(mensaje, data = null) {
+    document.getElementById('error-message').textContent = mensaje;
+    document.querySelector('.error-alert').style.display = 'block';
+    document.querySelector('.result-section').style.display = 'none';
+    
+    if (data && (data.pasos_solucion || data.problema_original)) {
+        mostrarResultadosIncompletos(data, mensaje);
+    }
+}
+
+function mostrarResultadosIncompletos(data, mensajeError) {
+    const contenido = document.getElementById('resultado-contenido');
+    
+    let html = `<div class="alert alert-danger mb-4">
+        <h6><i class="fas fa-exclamation-triangle me-2"></i>Error en la Resolución</h6>
+        <p class="mb-0">${mensajeError}</p>
+    </div>`;
+    
+    if (data.problema_original && Object.keys(data.problema_original).length > 0) {
+        html += '<div class="mb-4">';
+        html += '<h5><i class="fas fa-file-alt me-2"></i>Problema Original</h5>';
+        html += '<div class="card">';
+        html += '<div class="card-header"><h6 class="mb-0">Formulación del Problema</h6></div>';
+        html += '<div class="card-body">';
+        html += formatearProblema(
+            data.problema_original.c, 
+            data.problema_original.A, 
+            data.problema_original.b, 
+            data.problema_original.tipos, 
+            data.problema_original.tipo_opt, 
+            'X'
+        );
+        html += '</div></div></div>';
+    }
+    
+    if (data.pasos_solucion && Array.isArray(data.pasos_solucion) && data.pasos_solucion.length > 0) {
+        html += '<div class="mb-4">';
+        html += '<h5><i class="fas fa-list-ol me-2"></i>Pasos Realizados</h5>';
+        
+        data.pasos_solucion.forEach((paso, index) => {
+            if (paso && paso.titulo) {
+                html += `<div class="card step-card mb-3">`;
+                html += `<div class="card-header"><h6 class="mb-0">${paso.titulo}</h6></div>`;
+                html += `<div class="card-body">`;
+                
+                if (paso.c && paso.A && paso.b && paso.tipos && paso.tipo_opt) {
+                    if (paso.tipo === 'estandarizado') {
+                        html += formatearProblemaEstandarizado(paso, data.es_dual || false);
+                    } else {
+                        html += formatearProblema(paso.c, paso.A, paso.b, paso.tipos, paso.tipo_opt, data.es_dual ? 'Y' : 'X');
+                    }
+                } else {
+                    html += '<div class="alert alert-warning">Datos del paso incompletos</div>';
+                }
+                
+                html += `</div></div>`;
+            }
+        });
+        
+        html += '</div>';
+    }
+    
+    if (data.tableaux && data.tableaux.length > 0) {
+        html += '<div class="mb-4">';
+        html += '<h5><i class="fas fa-table me-2"></i>Tableaux Generados</h5>';
+        
+        data.tableaux.forEach((tableau, index) => {
+            html += `<div class="card mb-3">`;
+            html += `<div class="card-header">`;
+            html += `<h6 class="mb-0">Iteración ${tableau.iteracion}</h6>`;
+            html += `</div>`;
+            html += `<div class="card-body">`;
+            html += formatearTableau(
+                tableau, 
+                data.variables_originales || 2, 
+                data.variables_holgura || 0, 
+                data.variables_excedente || 0, 
+                data.variables_artificiales || 0, 
+                data.es_dual || false
+            );
+            html += `</div></div>`;
+        });
+        
+        html += '</div>';
+    }
+    
+    contenido.innerHTML = html;
+    document.querySelector('.result-section').style.display = 'block';
+}
+
+function ocultarResultados() {
+    document.querySelector('.result-section').style.display = 'none';
+    document.querySelector('.error-alert').style.display = 'none';
+}
+
+function mostrarResultados(data) {
+    console.log('Datos recibidos en mostrarResultados:', data);
+    
+    const contenido = document.getElementById('resultado-contenido');
+    
+    let html = '';
+    
+    if (data.pasos_solucion && Array.isArray(data.pasos_solucion) && data.pasos_solucion.length > 0) {
+        html += '<div class="mb-4">';
+        
+        if (data.es_dual) {
+            html += '<h5><i class="fas fa-exchange-alt me-2"></i>Proceso de Dualidad</h5>';
+        } else {
+            html += '<h5><i class="fas fa-project-diagram me-2"></i>Proceso de Solución</h5>';
+        }
+        
+        data.pasos_solucion.forEach((paso, index) => {
+            if (paso && paso.titulo) {
+                html += `<div class="card step-card mb-3">`;
+                html += `<div class="card-header"><h6 class="mb-0">${paso.titulo}</h6></div>`;
+                html += `<div class="card-body">`;
+                
+                if (paso.c && paso.A && paso.b && paso.tipos && paso.tipo_opt) {
+                    if (paso.tipo === 'estandarizado') {
+                        html += formatearProblemaEstandarizado(paso, data.es_dual);
+                    } else {
+                        html += formatearProblema(paso.c, paso.A, paso.b, paso.tipos, paso.tipo_opt, data.es_dual ? 'Y' : 'X');
+                    }
+                } else {
+                    html += '<div class="alert alert-warning">Datos del paso incompletos</div>';
+                }
+                
+                html += `</div></div>`;
+            }
+        });
+        
+        html += '</div>';
+    }
+    
+    // Mostrar solución óptima
+    html += '<div class="row mb-4">';
+    html += '<div class="col-md-6">';
+    html += '<div class="card border-success">';
+    html += '<div class="card-header bg-success text-white">';
+    html += '<h6 class="mb-0"><i class="fas fa-trophy me-2"></i>Solución Óptima</h6>';
+    html += '</div>';
+    html += '<div class="card-body">';
+    
+    html += '<h6><i class="fas fa-check-circle me-2 text-success"></i>Variables Básicas:</h6>';
+    html += '<ul class="list-unstyled">';
+    data.variables_basicas.forEach(variable => {
+        html += `<li><span class="variable-value">${variable.nombre} = ${variable.valor}</span></li>`;
+    });
+    html += '</ul>';
+    
+    if (data.variables_no_basicas.length > 0) {
+        html += '<h6><i class="fas fa-circle me-2 text-muted"></i>Variables No Básicas:</h6>';
+        html += '<ul class="list-unstyled">';
+        data.variables_no_basicas.forEach(variable => {
+            html += `<li><span class="text-muted">${variable.nombre} = ${variable.valor}</span></li>`;
+        });
+        html += '</ul>';
+    }
+    
+    html += `<div class="alert alert-success">`;
+    html += `<h6 class="mb-0">Valor Óptimo: <span class="optimal-value">Z(${data.tipo_optimizacion}) = ${data.z_optimo}</span></h6>`;
+    html += `</div>`;
+    
+    if (data.es_dual) {
+        html += '<div class="alert alert-info">';
+        html += '<i class="fas fa-info-circle me-2"></i>';
+        html += 'Esta es la solución del problema dual. Por el teorema de dualidad fuerte, ';
+        html += 'el valor óptimo del problema dual es igual al del problema primal.';
+        html += '</div>';
+    }
+    
+    html += '</div></div></div>';
+    
+    html += '<div class="col-md-6">';
+    html += '<div class="card">';
+    html += '<div class="card-header">';
+    html += '<h6 class="mb-0"><i class="fas fa-table me-2"></i>Iteraciones del Simplex</h6>';
+    html += '</div>';
+    html += '<div class="card-body">';
+    html += `<p class="text-muted">Se completaron ${data.tableaux.length - 1} iteraciones para encontrar la solución óptima.</p>`;
+    html += '</div></div></div>';
+    html += '</div>';
+    
+    if (data.tableaux && data.tableaux.length > 0) {
+        html += '<div class="mt-4">';
+        html += '<h5><i class="fas fa-table me-2"></i>Tableaux del Método Simplex</h5>';
+        
+        data.tableaux.forEach((tableau, index) => {
+            html += `<div class="card mb-3">`;
+            html += `<div class="card-header d-flex justify-content-between align-items-center">`;
+            html += `<h6 class="mb-0">Iteración ${tableau.iteracion}</h6>`;
+            if (tableau.es_optimo) {
+                html += `<span class="badge bg-success">Óptimo</span>`;
+            } else if (index > 0 && tableau.var_entrante && tableau.var_saliente) {
+                html += `<span class="badge bg-primary iteration-badge">`;
+                html += `Entra: ${tableau.var_entrante} | Sale: ${tableau.var_saliente}`;
+                html += `</span>`;
+            }
+            html += `</div>`;
+            html += `<div class="card-body">`;
+            html += formatearTableau(tableau, data.variables_originales, data.variables_holgura, data.variables_excedente, data.variables_artificiales, data.es_dual);
+            html += `</div></div>`;
+        });
+        
+        html += '</div>';
+    }
+    
+    contenido.innerHTML = html;
+    document.querySelector('.result-section').style.display = 'block';
+}
+
+function formatearProblemaEstandarizado(paso, es_dual) {
+    if (!paso.c || !paso.A || !paso.b || !paso.tipos || !paso.tipo_opt) {
+        return '<div class="alert alert-warning">Error al formatear el problema: datos incompletos</div>';
+    }
+    
+    const prefijo_var = es_dual ? 'Y' : 'X';  // CORREGIDO: usar Y para duales
+    let html = '<div class="math-expression p-3">';
+    
+    html += `<strong>Z(${paso.tipo_opt}) = </strong>`;
+    let primera_var = true;
+    
+    const vars_originales = paso.variables_originales || 0;
+    const vars_holgura = paso.variables_holgura || 0;
+    const vars_excedente = paso.variables_excedente || 0;
+    const vars_artificiales = paso.variables_artificiales || 0;
+    
+    // Variables originales
+    for (let i = 0; i < vars_originales; i++) {
+        const coef = paso.c[i];
+        
+        if (primera_var) {
+            if (coef === 1) {
+                html += `${prefijo_var}${i+1}`;
+            } else if (coef === -1) {
+                html += `-${prefijo_var}${i+1}`;
+            } else if (coef === 0) {
+                html += `0${prefijo_var}${i+1}`;
+            } else {
+                html += `${coef}${prefijo_var}${i+1}`;
+            }
+            primera_var = false;
+        } else {
+            if (coef === 1) {
+                html += ` + ${prefijo_var}${i+1}`;
+            } else if (coef === -1) {
+                html += ` - ${prefijo_var}${i+1}`;
+            } else if (coef === 0) {
+                html += ` + 0${prefijo_var}${i+1}`;
+            } else if (coef > 0) {
+                html += ` + ${coef}${prefijo_var}${i+1}`;
+            } else {
+                html += ` ${coef}${prefijo_var}${i+1}`;
+            }
+        }
+    }
+    
+    // Variables de holgura y excedente (S)
+    for (let i = 0; i < vars_holgura + vars_excedente; i++) {
+        const idx = vars_originales + i;
+        const coef = paso.c[idx];
+        
+        if (primera_var) {
+            if (coef === 1) {
+                html += `S${i+1}`;
+            } else if (coef === -1) {
+                html += `-S${i+1}`;
+            } else if (coef === 0) {
+                html += `0S${i+1}`;
+            } else {
+                html += `${coef}S${i+1}`;
+            }
+            primera_var = false;
+        } else {
+            if (coef === 1) {
+                html += ` + S${i+1}`;
+            } else if (coef === -1) {
+                html += ` - S${i+1}`;
+            } else if (coef === 0) {
+                html += ` + 0S${i+1}`;
+            } else if (coef > 0) {
+                html += ` + ${coef}S${i+1}`;
+            } else {
+                html += ` ${coef}S${i+1}`;
+            }
+        }
+    }
+    
+    // Variables artificiales (A)
+    for (let i = 0; i < vars_artificiales; i++) {
+        const idx = vars_originales + vars_holgura + vars_excedente + i;
+        const coef = paso.c[idx];
+        
+        let coef_display = '';
+        if (Math.abs(coef) >= 999) {
+            if (coef > 0) {
+                coef_display = 'M';
+            } else {
+                coef_display = '-M';
+            }
+        } else if (coef === 1) {
+            coef_display = '';
+        } else if (coef === -1) {
+            coef_display = '-';
+        } else if (coef === 0) {
+            coef_display = '0';
+        } else {
+            coef_display = coef.toString();
+        }
+        
+        if (primera_var) {
+            if (coef_display === '') {
+                html += `A${i+1}`;
+            } else if (coef_display === '-') {
+                html += `-A${i+1}`;
+            } else {
+                html += `${coef_display}A${i+1}`;
+            }
+            primera_var = false;
+        } else {
+            if (coef_display === '') {
+                html += ` + A${i+1}`;
+            } else if (coef_display === '-') {
+                html += ` - A${i+1}`;
+            } else if (coef_display === 'M') {
+                html += ` + MA${i+1}`;
+            } else if (coef_display === '-M') {
+                html += ` - MA${i+1}`;
+            } else if (coef_display === '0') {
+                html += ` + 0A${i+1}`;
+            } else if (coef > 0) {
+                html += ` + ${coef_display}A${i+1}`;
+            } else {
+                html += ` ${coef_display}A${i+1}`;
+            }
+        }
+    }
+    
+    if (primera_var) {
+        html += '0';
+    }
+    
+    html += '<br><strong>Sujeto a:</strong><br>';
+    
+    // Restricciones
+    for (let i = 0; i < paso.A.length; i++) {
+        if (!paso.A[i]) {
+            continue;
+        }
+        
+        html += '&nbsp;&nbsp;';
+        primera_var = true;
+        
+        // Variables originales
+        for (let j = 0; j < vars_originales; j++) {
+            const coef = paso.A[i][j];
+            
+            if (primera_var) {
+                if (coef === 1) {
+                    html += `${prefijo_var}${j+1}`;
+                } else if (coef === -1) {
+                    html += `-${prefijo_var}${j+1}`;
+                } else {
+                    html += `${coef}${prefijo_var}${j+1}`;
+                }
+                primera_var = false;
+            } else {
+                if (coef === 1) {
+                    html += ` + ${prefijo_var}${j+1}`;
+                } else if (coef === -1) {
+                    html += ` - ${prefijo_var}${j+1}`;
+                } else if (coef > 0) {
+                    html += ` + ${coef}${prefijo_var}${j+1}`;
+                } else if (coef < 0) {
+                    html += ` ${coef}${prefijo_var}${j+1}`;
+                }
+            }
+        }
+        
+        // Variables de holgura (S)
+        for (let j = 0; j < vars_holgura + vars_excedente; j++) {
+            const idx = vars_originales + j;
+            const coef = paso.A[i][idx];
+            
+            if (coef !== 0) {
+                if (primera_var) {
+                    if (coef === 1) {
+                        html += `S${j+1}`;
+                    } else if (coef === -1) {
+                        html += `-S${j+1}`;
+                    } else {
+                        html += `${coef}S${j+1}`;
+                    }
+                    primera_var = false;
+                } else {
+                    if (coef === 1) {
+                        html += ` + S${j+1}`;
+                    } else if (coef === -1) {
+                        html += ` - S${j+1}`;
+                    } else if (coef > 0) {
+                        html += ` + ${coef}S${j+1}`;
+                    } else {
+                        html += ` ${coef}S${j+1}`;
+                    }
+                }
+            }
+        }
+        
+        // Variables artificiales (A)
+        for (let j = 0; j < vars_artificiales; j++) {
+            const idx = vars_originales + vars_holgura + vars_excedente + j;
+            const coef = paso.A[i][idx];
+            
+            if (coef !== 0) {
+                if (primera_var) {
+                    if (coef === 1) {
+                        html += `A${j+1}`;
+                    } else if (coef === -1) {
+                        html += `-A${j+1}`;
+                    } else {
+                        html += `${coef}A${j+1}`;
+                    }
+                    primera_var = false;
+                } else {
+                    if (coef === 1) {
+                        html += ` + A${j+1}`;
+                    } else if (coef === -1) {
+                        html += ` - A${j+1}`;
+                    } else if (coef > 0) {
+                        html += ` + ${coef}A${j+1}`;
+                    } else {
+                        html += ` ${coef}A${j+1}`;
+                    }
+                }
+            }
+        }
+        
+        if (primera_var) {
+            html += '0';
+        }
+        
+        const tipo_restriccion = paso.tipos && paso.tipos[i] ? paso.tipos[i] : '=';
+        const valor_b = paso.b && paso.b[i] !== undefined ? paso.b[i] : '?';
+        
+        html += ` ${tipo_restriccion} ${valor_b}<br>`;
+    }
+    
+    // No negatividad
+    const todas_vars = [];
+    
+    for (let i = 0; i < vars_originales; i++) {
+        todas_vars.push(`${prefijo_var}${i+1}`);
+    }
+    
+    for (let i = 0; i < vars_holgura + vars_excedente; i++) {
+        todas_vars.push(`S${i+1}`);
+    }
+    
+    for (let i = 0; i < vars_artificiales; i++) {
+        todas_vars.push(`A${i+1}`);
+    }
+    
+    if (todas_vars.length > 0) {
+        html += `&nbsp;&nbsp;${todas_vars.join(', ')} ≥ 0`;
+    }
+    
+    html += '</div>';
+    return html;
+}
+
+function formatearProblema(c, A, b, tipos, tipo_opt, prefijo_var) {
+    if (!c || !A || !b || !tipos || !tipo_opt || !prefijo_var) {
+        return '<div class="alert alert-warning">Error al formatear el problema: datos incompletos</div>';
+    }
+    
+    let html = '<div class="math-expression p-3">';
+    
+    html += `<strong>Z(${tipo_opt}) = </strong>`;
+    let primera_var = true;
+    
+    for (let i = 0; i < c.length; i++) {
+        if (c[i] !== 0) {
+            if (primera_var) {
+                if (c[i] === 1) {
+                    html += `${prefijo_var}${i+1}`;
+                } else if (c[i] === -1) {
+                    html += `-${prefijo_var}${i+1}`;
+                } else {
+                    html += `${c[i]}${prefijo_var}${i+1}`;
+                }
+                primera_var = false;
+            } else {
+                if (c[i] === 1) {
+                    html += ` + ${prefijo_var}${i+1}`;
+                } else if (c[i] === -1) {
+                    html += ` - ${prefijo_var}${i+1}`;
+                } else if (c[i] > 0) {
+                    html += ` + ${c[i]}${prefijo_var}${i+1}`;
+                } else {
+                    html += ` ${c[i]}${prefijo_var}${i+1}`;
+                }
+            }
+        }
+    }
+    
+    if (primera_var) {
+        html += '0';
+    }
+    
+    html += '<br><strong>Sujeto a:</strong><br>';
+    
+    for (let i = 0; i < A.length; i++) {
+        if (!A[i]) {
+            continue;
+        }
+        
+        html += '&nbsp;&nbsp;';
+        primera_var = true;
+        
+        for (let j = 0; j < A[i].length; j++) {
+            if (A[i][j] !== 0) {
+                if (primera_var) {
+                    if (A[i][j] === 1) {
+                        html += `${prefijo_var}${j+1}`;
+                    } else if (A[i][j] === -1) {
+                        html += `-${prefijo_var}${j+1}`;
+                    } else {
+                        html += `${A[i][j]}${prefijo_var}${j+1}`;
+                    }
+                    primera_var = false;
+                } else {
+                    if (A[i][j] === 1) {
+                        html += ` + ${prefijo_var}${j+1}`;
+                    } else if (A[i][j] === -1) {
+                        html += ` - ${prefijo_var}${j+1}`;
+                    } else if (A[i][j] > 0) {
+                        html += ` + ${A[i][j]}${prefijo_var}${j+1}`;
+                    } else {
+                        html += ` ${A[i][j]}${prefijo_var}${j+1}`;
+                    }
+                }
+            }
+        }
+        
+        if (primera_var) {
+            html += '0';
+        }
+        
+        const tipo_restriccion = tipos && tipos[i] ? tipos[i] : '<=';
+        const valor_b = b && b[i] !== undefined ? b[i] : '?';
+        
+        html += ` ${tipo_restriccion} ${valor_b}<br>`;
+    }
+    
+    if (c.length > 0) {
+        const vars = [];
+        for (let i = 0; i < c.length; i++) {
+            vars.push(`${prefijo_var}${i+1}`);
+        }
+        html += `&nbsp;&nbsp;${vars.join(', ')} ≥ 0`;
+    }
+    
+    html += '</div>';
+    return html;
+}
+
+function formatearTableau(tableau, vars_originales, vars_holgura, vars_excedente, vars_artificiales, es_dual) {
+    const numFilas = tableau.tableau.length - 1;
+    const numCols = tableau.tableau[0].length - 1;
+    
+    let html = '<div class="table-responsive">';
+    html += '<table class="table table-bordered tableau-table">';
+    
+    // Encabezado con Cj
+    html += '<thead><tr>';
+    html += '<th></th><th></th><th>Cj</th>';
+    
+    const cjValues = tableau.cj || [];
+    
+    for (let j = 0; j < numCols; j++) {
+        const nombreVar = obtenerNombreVariable(j, vars_originales, vars_holgura, vars_excedente, vars_artificiales, es_dual);
+        
+        let cjValue = j < cjValues.length ? cjValues[j] : 0;
+        
+        if (Math.abs(cjValue) >= 999) {
+            cjValue = cjValue > 0 ? 'M' : '-M';
+        } else {
+            cjValue = cjValue.toFixed(1);
+        }
+        
+        html += `<th>${cjValue}</th>`;
+    }
+    html += '</tr>';
+    
+    // Encabezado principal
+    html += '<tr>';
+    html += '<th>Ci</th><th>Vb</th><th>Bi</th>';
+    for (let j = 0; j < numCols; j++) {
+        const nombreVar = obtenerNombreVariable(j, vars_originales, vars_holgura, vars_excedente, vars_artificiales, es_dual);
+        html += `<th>${nombreVar}</th>`;
+    }
+    html += '</tr></thead>';
+    
+    html += '<tbody>';
+    
+    // Filas de restricciones
+    for (let i = 0; i < numFilas; i++) {
+        html += '<tr>';
+        
+        const varBasica = tableau.basic_vars[i];
+        const nombreVarBasica = obtenerNombreVariable(varBasica, vars_originales, vars_holgura, vars_excedente, vars_artificiales, es_dual);
+        
+        let ciValue = varBasica < cjValues.length ? cjValues[varBasica] : 0;
+        
+        if (Math.abs(ciValue) >= 999) {
+            ciValue = ciValue > 0 ? 'M' : '-M';
+        } else {
+            ciValue = ciValue.toFixed(1);
+        }
+        
+        html += `<td class="basic-var">${ciValue}</td>`;
+        html += `<td class="basic-var">${nombreVarBasica}</td>`;
+        html += `<td>${tableau.tableau[i][numCols].toFixed(1)}</td>`;
+        
+        for (let j = 0; j < numCols; j++) {
+            let clase = '';
+            if (tableau.col_pivote === j && tableau.fila_pivote === i) {
+                clase = 'pivot-cell';
+            }
+            html += `<td class="${clase}">${tableau.tableau[i][j].toFixed(1)}</td>`;
+        }
+        html += '</tr>';
+    }
+    
+    // Fila Zj
+    html += '<tr class="zj-row">';
+    html += '<td></td><td>Zj</td>';
+    
+    let zjBi = tableau.zj_bi || 0;
+    html += `<td><strong>${zjBi.toFixed(1)}</strong></td>`;
+    
+    const zjValues = tableau.zj_values || [];
+    for (let j = 0; j < numCols; j++) {
+        const zj = j < zjValues.length ? zjValues[j] : 0;
+        let zjFormatted = zj;
+        if (Math.abs(zj) >= 999) {
+            zjFormatted = zj.toFixed(1);
+        } else {
+            zjFormatted = zj.toFixed(1);
+        }
+        html += `<td><strong>${zjFormatted}</strong></td>`;
+    }
+    html += '</tr>';
+    
+    // Fila Cj-Zj
+    html += '<tr class="cj-zj-row">';
+    html += '<td></td><td>Cj-Zj</td><td></td>';
+    
+    const cjZjValues = tableau.cj_zj_values || [];
+    for (let j = 0; j < numCols; j++) {
+        const cjZj = j < cjZjValues.length ? cjZjValues[j] : 0;
+        
+        let clase = '';
+        if (tableau.col_pivote === j) {
+            clase = 'pivot-cell';
+        }
+        
+        let cjZjFormatted = cjZj;
+        if (Math.abs(cjZj) >= 999) {
+            cjZjFormatted = cjZj.toFixed(1);
+        } else {
+            cjZjFormatted = cjZj.toFixed(1);
+        }
+        
+        html += `<td class="${clase}"><strong>${cjZjFormatted}</strong></td>`;
+    }
+    html += '</tr>';
+    
+    html += '</tbody></table></div>';
+    
+    return html;
+}
+
+function obtenerNombreVariable(index, vars_originales, vars_holgura, vars_excedente, vars_artificiales, es_dual) {
+    if (index < vars_originales) {
+        return es_dual ? `Y${index + 1}` : `X${index + 1}`;  // CORREGIDO: usar Y para duales
+    }
+    
+    const index_adj = index - vars_originales;
+    const total_s = vars_holgura + vars_excedente;
+    
+    if (index_adj < total_s) {
+        return `S${index_adj + 1}`;
+    }
+    
+    return `A${index_adj - total_s + 1}`;
+}
+
+// Event listener para el formulario
+document.getElementById('simplexForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    mostrarLoading();
+    
+    const funcionObjetivo = document.getElementById('funcion_objetivo').value.trim();
+    const tipoOptimizacion = document.querySelector('input[name="tipo_optimizacion"]:checked').value;
+    const aplicarDualidad = document.getElementById('aplicar_dualidad').checked;
+    
+    const restricciones = [];
+    document.querySelectorAll('.restriccion').forEach(input => {
+        if (input.value.trim()) {
+            restricciones.push(input.value.trim());
+        }
+    });
+    
+    if (!funcionObjetivo) {
+        ocultarLoading();
+        mostrarError('Por favor ingrese la función objetivo');
+        return;
+    }
+    
+    if (restricciones.length === 0) {
+        ocultarLoading();
+        mostrarError('Por favor ingrese al menos una restricción');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/resolver', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                funcion_objetivo: funcionObjetivo,
+                tipo_optimizacion: tipoOptimizacion,
+                restricciones: restricciones,
+                aplicar_dualidad: aplicarDualidad
+            })
+        });
+    
+        console.log('Response status:', response.status);
+    
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.log('Error data:', errorData);
+            ocultarLoading();
+            mostrarError(errorData.error || `Error ${response.status}: ${response.statusText}`, errorData);
+            return;
+        }
+    
+        const data = await response.json();
+        console.log('Success data:', data);
+    
+        ocultarLoading();
+    
+        if (data.error) {
+            mostrarError(data.error, data);
+        } else if (data.exito) {
+            mostrarResultados(data);
+        } else {
+            mostrarError('Error desconocido al resolver el problema');
+        }
+    
+    } catch (error) {
+        console.error('Fetch error:', error);
+        ocultarLoading();
+        mostrarError('Error de conexión: ' + error.message);
+    }
+});
+
+// Smooth scrolling para los enlaces de navegación
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+</script>
+{% endblock %}
